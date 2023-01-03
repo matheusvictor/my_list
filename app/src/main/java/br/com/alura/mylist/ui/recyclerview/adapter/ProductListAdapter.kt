@@ -1,0 +1,45 @@
+package br.com.alura.mylist.ui.recyclerview.adapter
+
+import android.content.Context
+import android.graphics.Color
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import br.com.alura.mylist.model.Product
+import androidx.recyclerview.widget.RecyclerView
+import br.com.alura.mylist.R
+
+class ProductListAdapter(
+    private val context: Context,
+    private val products: List<Product>
+) : RecyclerView.Adapter<ProductListAdapter.ProductListViewHolder>() {
+
+    inner class ProductListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        fun linkProductToView(product: Product) {
+            val productName = itemView.findViewById<TextView>(R.id.product_name)
+            productName.text = product.productName
+            productName.setTextColor(Color.BLACK)
+            val productDescription = itemView.findViewById<TextView>(R.id.product_description)
+            productDescription.text = product.description
+            val productPrice = itemView.findViewById<TextView>(R.id.product_price)
+            productPrice.text = product.price.toPlainString()
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductListViewHolder {
+        // Transforma o layout em uma View
+        val inflateView = LayoutInflater.from(context)
+            .inflate(R.layout.product_item, parent, false)
+        return ProductListViewHolder(inflateView)
+    }
+
+    override fun onBindViewHolder(holder: ProductListViewHolder, position: Int) {
+        val product = products[position]
+        holder.linkProductToView(product)
+    }
+
+    override fun getItemCount(): Int = products.size
+
+}
