@@ -6,4 +6,43 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.ProductFormActivity">
 
+    <EditText
+        android:id="@+id/form_product_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:hint="Product name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/form_product_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Product description"
+        app:layout_constraintEnd_toEndOf="@id/form_product_name"
+        app:layout_constraintStart_toStartOf="@id/form_product_name"
+        app:layout_constraintTop_toBottomOf="@id/form_product_name" />
+
+    <EditText
+        android:id="@+id/form_product_price"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="R$ 0.00"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="@id/form_product_name"
+        app:layout_constraintStart_toStartOf="@id/form_product_name"
+        app:layout_constraintTop_toBottomOf="@id/form_product_description" />
+
+    <Button
+        android:id="@+id/bt_form_confirm"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="Confirm"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
