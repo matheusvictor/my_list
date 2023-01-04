@@ -2,28 +2,26 @@ package br.com.alura.mylist.ui.activity
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alura.mylist.R
-import br.com.alura.mylist.model.Product
+import br.com.alura.mylist.dao.ProductsDAO
 import br.com.alura.mylist.ui.recyclerview.adapter.ProductListAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.math.BigDecimal
 
 class MainActivity : Activity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onResume() {
+        super.onResume()
         setContentView(R.layout.activity_main)
+
+        val products = ProductsDAO()
+        Log.i("MainActivity", "onCreate: ${products.findAll()}")
 
         val recyclerView = findViewById<RecyclerView>(R.id.rv_product_list)
         recyclerView.adapter = ProductListAdapter(
             context = this,
-            products = listOf(
-                Product("Example Name", "Example Desc", BigDecimal("1.99")),
-                Product("Example Name", "Example Desc", BigDecimal("1.99")),
-                Product("Example Name", "Example Desc", BigDecimal("1.99")),
-            )
+            products = products.findAll()
         )
 
         clickOnFloatingButton()
