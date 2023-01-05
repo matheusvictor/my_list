@@ -1,14 +1,11 @@
 package br.com.alura.mylist.ui.recyclerview.adapter
 
 import android.content.Context
-import android.graphics.Color
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import br.com.alura.mylist.model.Product
 import androidx.recyclerview.widget.RecyclerView
-import br.com.alura.mylist.R
+import br.com.alura.mylist.databinding.ProductItemBinding
+import br.com.alura.mylist.model.Product
 
 class ProductListAdapter(
     private val context: Context,
@@ -17,24 +14,26 @@ class ProductListAdapter(
 
     private val dataSet = products.toMutableList() // cópia da lista recebida como parâmetro
 
-    inner class ProductListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ProductListViewHolder(private val binding: ProductItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun linkProductToView(product: Product) {
-            val productName = itemView.findViewById<TextView>(R.id.product_name)
+            val productName = binding.productName
             productName.text = product.productName
-            productName.setTextColor(Color.BLACK)
-            val productDescription = itemView.findViewById<TextView>(R.id.product_description)
+            val productDescription = binding.productDescription
             productDescription.text = product.description
-            val productPrice = itemView.findViewById<TextView>(R.id.product_price)
+            val productPrice = binding.productPrice
             productPrice.text = product.price.toPlainString()
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductListViewHolder {
-        // Transforma o layout em uma View
-        val inflateView = LayoutInflater.from(context)
-            .inflate(R.layout.product_item, parent, false)
-        return ProductListViewHolder(inflateView)
+        val bindingViewHolder = ProductItemBinding.inflate(
+            LayoutInflater.from(context),
+            parent,
+            false
+        )
+        return ProductListViewHolder(bindingViewHolder)
     }
 
     override fun onBindViewHolder(holder: ProductListViewHolder, position: Int) {
