@@ -8,7 +8,7 @@
     <ImageView
         android:id="@+id/product_image"
         android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_height="0dp"
         android:layout_margin="8dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent "
@@ -22,24 +22,40 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat_bold"
+        android:maxLines="1"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/product_image"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Fruit's name" />
+        tools:text="@tools:sample/lorem/random" />
 
     <TextView
         android:id="@+id/product_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat"
+        android:maxLines="1"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@id/product_name"
         app:layout_constraintStart_toStartOf="@id/product_name"
         app:layout_constraintTop_toBottomOf="@id/product_name"
-        tools:text="This is a simple description" />
+        tools:text="@tools:sample/lorem/random" />
 
     <TextView
         android:id="@+id/product_price"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/montserrat"
+        android:maxLines="1"
+        android:textColor="@android:color/holo_green_dark"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/product_name"
         app:layout_constraintStart_toStartOf="@id/product_name"
         app:layout_constraintTop_toBottomOf="@id/product_description"
