@@ -15,24 +15,21 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        onClickConfirmButton()
-
+        setConfirmButton()
     }
 
-    private fun onClickConfirmButton() {
+    private fun setConfirmButton() {
 
+        val productsDAO = ProductsDAO()
         val confirmButton = findViewById<Button>(R.id.bt_form_confirm)
-        confirmButton.setOnClickListener {
 
+        confirmButton.setOnClickListener {
             val newProduct = createNewProduct()
 
-            val productsDAO = ProductsDAO()
             productsDAO.add(newProduct)
             Log.i("ProductFormActivity", "onCreate: ${productsDAO.findAll()}")
-
             finish() // finaliza activity e remove da pilha
         }
-
     }
 
     private fun createNewProduct(): Product {
@@ -53,13 +50,11 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
             BigDecimal.ZERO
         }
 
-        val newProduct = Product(
+        return Product(
             productName = productName,
             description = productDescription,
             price = productPrice
         )
-        return newProduct
-        Log.i("ProductFormActivity", "onCreate: $newProduct")
     }
 
 }
