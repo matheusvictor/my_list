@@ -12,8 +12,10 @@ import br.com.alura.mylist.R
 
 class ProductListAdapter(
     private val context: Context,
-    private val products: List<Product>
+    var products: List<Product>
 ) : RecyclerView.Adapter<ProductListAdapter.ProductListViewHolder>() {
+
+    private val dataSet = products.toMutableList() // cópia da lista recebida como parâmetro
 
     inner class ProductListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -41,5 +43,11 @@ class ProductListAdapter(
     }
 
     override fun getItemCount(): Int = products.size
+
+    fun update(products: List<Product>) {
+        this.dataSet.clear()
+        this.dataSet.addAll(products)
+        notifyDataSetChanged() // notifica o adapter que os dados internos foram modificados
+    }
 
 }

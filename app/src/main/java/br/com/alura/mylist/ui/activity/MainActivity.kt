@@ -2,6 +2,7 @@ package br.com.alura.mylist.ui.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alura.mylist.R
@@ -11,27 +12,40 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : Activity() {
 
-    override fun onResume() {
-        super.onResume()
+    private val productsDAO = ProductsDAO()
+    private val adapter = ProductListAdapter(
+        context = this,
+        products = productsDAO.findAll()
+    )
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val products = ProductsDAO()
-        Log.i("MainActivity", "onCreate: ${products.findAll()}")
-
-        val recyclerView = findViewById<RecyclerView>(R.id.rv_product_list)
-        recyclerView.adapter = ProductListAdapter(
-            context = this,
-            products = products.findAll()
-        )
-
-        clickOnFloatingButton()
+        setRecyclerView()
+        setFab()
     }
 
-    private fun clickOnFloatingButton() {
+    override fun onResume() {
+        super.onResume()
+        adapter.update(productsDAO.findAll())
+    }
+
+    private fun setRecyclerView() {
+        val recyclerView = findViewById<RecyclerView>(R.id.rv_product_list)
+        recyclerView.adapter = adapter
+    }
+
+    private fun setFab() {
         val fab = findViewById<FloatingActionButton>(R.id.floating_add_item)
         fab.setOnClickListener {
-            val intentFormActivity = Intent(this, ProductFormActivity::class.java)
-            startActivity(intentFormActivity)
+            goToProductForm()
         }
     }
+
+    private fun goToProductForm() {
+        val intentFormActivity = Intent(this, ProductFormActivity::class.java)
+        startActivity(intentFormActivity)
+    }
+
 }
