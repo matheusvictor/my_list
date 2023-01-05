@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alura.mylist.databinding.ProductItemBinding
 import br.com.alura.mylist.model.Product
+import java.text.NumberFormat
+import java.util.*
 
 class ProductListAdapter(
     private val context: Context,
@@ -23,7 +25,11 @@ class ProductListAdapter(
             val productDescription = binding.productDescription
             productDescription.text = product.description
             val productPrice = binding.productPrice
-            productPrice.text = product.price.toPlainString()
+
+            val currencyFormatter: NumberFormat =
+                NumberFormat.getCurrencyInstance(Locale("pt", "br"))
+            val priceToReal: String = currencyFormatter.format(product.price)
+            productPrice.text = priceToReal
         }
     }
 
