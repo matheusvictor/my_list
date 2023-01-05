@@ -10,10 +10,6 @@ import br.com.alura.mylist.ui.recyclerview.adapter.ProductListAdapter
 class MainActivity : Activity() {
 
     private val productsDAO = ProductsDAO()
-    private val adapter = ProductListAdapter(
-        context = this,
-        products = productsDAO.findAll()
-    )
     private val bindingActivityMain by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,12 +21,17 @@ class MainActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
-        adapter.update(productsDAO.findAll())
+//        adapter.update(productsDAO.findAll())
+        setContentView(bindingActivityMain.root)
+        setRecyclerView()
     }
 
     private fun setRecyclerView() {
         val recyclerView = bindingActivityMain.rvProductList
-        recyclerView.adapter = adapter
+        recyclerView.adapter = ProductListAdapter(
+            context = this,
+            products = productsDAO.findAll()
+        )
     }
 
     private fun setFab() {
