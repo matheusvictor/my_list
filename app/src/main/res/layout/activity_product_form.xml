@@ -20,7 +20,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+            app:srcCompat="@drawable/default_image"
+            tools:srcCompat="@drawable/default_image" />
 
         <TextView
             android:id="@+id/form_title"
@@ -47,7 +48,8 @@
                 android:id="@+id/form_product_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Product name" />
+                android:hint="Product name"
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -65,7 +67,8 @@
                 android:id="@+id/form_product_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Product description" />
+                android:hint="Product description"
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -83,7 +86,8 @@
                 android:id="@+id/form_product_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="R$ 0.00" />
+                android:hint="R$ 0.00"
+                android:inputType="numberDecimal" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
