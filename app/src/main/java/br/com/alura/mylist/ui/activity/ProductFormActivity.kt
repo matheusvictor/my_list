@@ -1,7 +1,9 @@
 package br.com.alura.mylist.ui.activity
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.mylist.R
 import br.com.alura.mylist.dao.ProductsDAO
@@ -19,6 +21,15 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setConfirmButton()
+
+        binding.formImageProduct.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setView(R.layout.form_image)
+                .setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ -> })
+                .setPositiveButton("Confirm", DialogInterface.OnClickListener { _, _ -> })
+                .setCancelable(true)
+                .show()
+        }
     }
 
     private fun setConfirmButton() {
