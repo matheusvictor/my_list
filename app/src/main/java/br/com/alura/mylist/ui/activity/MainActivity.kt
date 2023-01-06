@@ -35,7 +35,7 @@ class MainActivity : Activity() {
     }
 
     private fun setFab() {
-        val fab = bindingActivityMain.floatingAddItem
+        val fab = bindingActivityMain.extendedFab
         fab.setOnClickListener {
             goToProductForm()
         }
