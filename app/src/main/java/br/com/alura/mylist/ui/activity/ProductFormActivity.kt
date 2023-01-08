@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.mylist.R
 import br.com.alura.mylist.dao.ProductsDAO
 import br.com.alura.mylist.databinding.ActivityProductFormBinding
+import br.com.alura.mylist.extension.tryLoadImage
 import br.com.alura.mylist.model.Product
+import br.com.alura.mylist.ui.dialog.FormImageDialog
 import java.math.BigDecimal
 
 class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
@@ -14,11 +16,24 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
     private val binding by lazy {
         ActivityProductFormBinding.inflate(layoutInflater)
     }
+    private var urlImage: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        title = "Add New Product" // set title for activity
+
         setConfirmButton()
+
+        binding.formImageProduct.setOnClickListener {
+            FormImageDialog(this)
+                .show(urlImage) {
+                    urlImage = it
+                    binding.formImageProduct.tryLoadImage(urlImage)
+                }
+        }
+
     }
 
     private fun setConfirmButton() {
@@ -56,7 +71,8 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
         return Product(
             productName = productName,
             description = productDescription,
-            price = productPrice
+            price = productPrice,
+            url = urlImage
         )
     }
 

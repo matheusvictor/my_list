@@ -2,14 +2,18 @@ package br.com.alura.mylist.ui.recyclerview.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alura.mylist.databinding.ProductItemBinding
+import br.com.alura.mylist.extension.tryLoadImage
 import br.com.alura.mylist.model.Product
+import java.text.NumberFormat
+import java.util.*
 
 class ProductListAdapter(
     private val context: Context,
-    var products: List<Product>
+    products: List<Product>
 ) : RecyclerView.Adapter<ProductListAdapter.ProductListViewHolder>() {
 
     private val dataSet = products.toMutableList() // cópia da lista recebida como parâmetro
@@ -23,7 +27,18 @@ class ProductListAdapter(
             val productDescription = binding.productDescription
             productDescription.text = product.description
             val productPrice = binding.productPrice
-            productPrice.text = product.price.toPlainString()
+
+            val currencyFormatter: NumberFormat =
+                NumberFormat.getCurrencyInstance(Locale("pt", "br"))
+            val priceToReal: String = currencyFormatter.format(product.price)
+            productPrice.text = priceToReal
+
+            if (product.url.isNullOrBlank()) {
+                binding.ivProductImage.visibility = View.GONE
+            } else {
+                binding.ivProductImage.visibility = View.VISIBLE
+                binding.ivProductImage.tryLoadImage(product.url)
+            }
         }
     }
 
@@ -37,11 +52,11 @@ class ProductListAdapter(
     }
 
     override fun onBindViewHolder(holder: ProductListViewHolder, position: Int) {
-        val product = products[position]
+        val product = dataSet[position]
         holder.linkProductToView(product)
     }
 
-    override fun getItemCount(): Int = products.size
+    override fun getItemCount(): Int = dataSet.size
 
     fun update(products: List<Product>) {
         this.dataSet.clear()
