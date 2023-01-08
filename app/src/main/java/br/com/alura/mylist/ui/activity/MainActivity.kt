@@ -11,6 +11,12 @@ class MainActivity : Activity() {
 
     private val productsDAO = ProductsDAO()
     private val bindingActivityMain by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private val adapter by lazy {
+        ProductListAdapter(
+            context = this,
+            products = productsDAO.findAll()
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,17 +27,12 @@ class MainActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
-//        adapter.update(productsDAO.findAll())
-        setContentView(bindingActivityMain.root)
-        setRecyclerView()
+        adapter.update(productsDAO.findAll())
     }
 
     private fun setRecyclerView() {
         val recyclerView = bindingActivityMain.rvProductList
-        recyclerView.adapter = ProductListAdapter(
-            context = this,
-            products = productsDAO.findAll()
-        )
+        recyclerView.adapter = adapter
     }
 
     private fun setFab() {
