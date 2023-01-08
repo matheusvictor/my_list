@@ -1,14 +1,14 @@
 package br.com.alura.mylist.ui.activity
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.mylist.R
 import br.com.alura.mylist.dao.ProductsDAO
 import br.com.alura.mylist.databinding.ActivityProductFormBinding
+import br.com.alura.mylist.extension.tryLoadImage
 import br.com.alura.mylist.model.Product
+import br.com.alura.mylist.ui.dialog.FormImageDialog
 import java.math.BigDecimal
 
 class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
@@ -16,6 +16,7 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
     private val binding by lazy {
         ActivityProductFormBinding.inflate(layoutInflater)
     }
+    private var urlImage: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,13 +24,12 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
         setConfirmButton()
 
         binding.formImageProduct.setOnClickListener {
-            AlertDialog.Builder(this)
-                .setView(R.layout.form_image)
-                .setNegativeButton("Cancel", DialogInterface.OnClickListener { _, _ -> })
-                .setPositiveButton("Confirm", DialogInterface.OnClickListener { _, _ -> })
-                .setCancelable(true)
-                .show()
+            FormImageDialog(this).show {
+                urlImage = it
+                binding.formImageProduct.tryLoadImage(urlImage)
+            }
         }
+
     }
 
     private fun setConfirmButton() {
@@ -67,7 +67,8 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
         return Product(
             productName = productName,
             description = productDescription,
-            price = productPrice
+            price = productPrice,
+            url = urlImage
         )
     }
 
