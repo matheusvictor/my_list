@@ -24,10 +24,11 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
         setConfirmButton()
 
         binding.formImageProduct.setOnClickListener {
-            FormImageDialog(this).show {
-                urlImage = it
-                binding.formImageProduct.tryLoadImage(urlImage)
-            }
+            FormImageDialog(this)
+                .show(urlImage) {
+                    urlImage = it
+                    binding.formImageProduct.tryLoadImage(urlImage)
+                }
         }
 
     }
