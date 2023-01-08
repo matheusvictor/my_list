@@ -21,6 +21,9 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        title = "Add New Product" // set title for activity
+
         setConfirmButton()
 
         binding.formImageProduct.setOnClickListener {
