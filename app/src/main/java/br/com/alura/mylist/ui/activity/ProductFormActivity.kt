@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.mylist.R
 import br.com.alura.mylist.databinding.ActivityProductFormBinding
+import br.com.alura.mylist.extension.formatToRealCurrency
 import br.com.alura.mylist.extension.tryLoadImage
 import br.com.alura.mylist.model.Product
 import br.com.alura.mylist.repository.AppDatabase
@@ -17,6 +18,7 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
         ActivityProductFormBinding.inflate(layoutInflater)
     }
     private var urlImage: String? = null
+    private var productId: Long = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +35,17 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
                     binding.formImageProduct.tryLoadImage(urlImage)
                 }
         }
+
+        intent.getParcelableExtra<Product>(CHAVE_PRODUTO)?.let { product ->
+            title =
+                "Edit Produtc" // altera o título da activity se for aberta a partir do menu de edição
+            productId = product.id
+            binding.formImageProduct.tryLoadImage(product.url)
+            binding.formProductName.setText(product.productName)
+            binding.formProductDescription.setText(product.description)
+            binding.formProductPrice.setText(product.price.toPlainString())
+        }
+
     }
 
     private fun setConfirmButton() {

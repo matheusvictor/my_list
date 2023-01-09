@@ -1,5 +1,6 @@
 package br.com.alura.mylist.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -38,7 +39,10 @@ class ProductDetailsActivity : AppCompatActivity() {
 
             when (item.itemId) {
                 R.id.menu_details_edit_product -> {
-
+                    Intent(this, ProductFormActivity::class.java).apply {
+                        putExtra(CHAVE_PRODUTO, product)
+                        startActivity(this)
+                    }
                 }
                 R.id.menu_details_delete_product -> {
                     productDao.delete(product)
