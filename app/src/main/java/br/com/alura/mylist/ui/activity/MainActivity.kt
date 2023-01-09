@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import br.com.alura.mylist.dao.ProductsDAO
 import br.com.alura.mylist.databinding.ActivityMainBinding
+import br.com.alura.mylist.repository.AppDatabase
 import br.com.alura.mylist.ui.recyclerview.adapter.ProductListAdapter
 
 class MainActivity : Activity() {
@@ -27,6 +28,11 @@ class MainActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
+
+        // AppDatabase Instance
+        val db = AppDatabase.getInstance(this)
+
+        val productsDAO = db.productDao()
         adapter.update(productsDAO.findAll())
     }
 

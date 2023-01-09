@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.mylist.R
-import br.com.alura.mylist.dao.ProductsDAO
 import br.com.alura.mylist.databinding.ActivityProductFormBinding
 import br.com.alura.mylist.extension.tryLoadImage
 import br.com.alura.mylist.model.Product
+import br.com.alura.mylist.repository.AppDatabase
 import br.com.alura.mylist.ui.dialog.FormImageDialog
 import java.math.BigDecimal
 
@@ -33,20 +33,21 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
                     binding.formImageProduct.tryLoadImage(urlImage)
                 }
         }
-
     }
 
     private fun setConfirmButton() {
 
         val confirmButton = binding.btFormConfirm
-        val productsDAO = ProductsDAO()
+
+        // AppDatabase Instance
+        val db = AppDatabase.getInstance(this)
+
+        val productsDAO = db.productDao()
 
         confirmButton.setOnClickListener {
             val newProduct = createNewProduct()
-
-            productsDAO.add(newProduct)
-            Log.i("ProductFormActivity", "onCreate: ${productsDAO.findAll()}")
-            finish() // finaliza activity e remove da pilha
+            productsDAO.save(newProduct)
+            finish()
         }
     }
 
