@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import br.com.alura.mylist.databinding.ProductItemBinding
+import br.com.alura.mylist.extension.formatToRealCurrency
 import br.com.alura.mylist.extension.tryLoadImage
 import br.com.alura.mylist.model.Product
 import java.text.NumberFormat
@@ -13,7 +14,8 @@ import java.util.*
 
 class ProductListAdapter(
     private val context: Context,
-    products: List<Product>
+    products: List<Product>,
+    var whenClickOnItem: (product: Product) -> Unit = {}
 ) : RecyclerView.Adapter<ProductListAdapter.ProductListViewHolder>() {
 
     private val dataSet = products.toMutableList() // cópia da lista recebida como parâmetro
@@ -21,17 +23,27 @@ class ProductListAdapter(
     inner class ProductListViewHolder(private val binding: ProductItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        private lateinit var product: Product
+
+        init {
+            itemView.setOnClickListener {
+                if (::product.isInitialized) {
+                    whenClickOnItem(product)
+                }
+            }
+        }
+
         fun linkProductToView(product: Product) {
+            this.product = product
+
             val productName = binding.productName
             productName.text = product.productName
             val productDescription = binding.productDescription
             productDescription.text = product.description
             val productPrice = binding.productPrice
 
-            val currencyFormatter: NumberFormat =
-                NumberFormat.getCurrencyInstance(Locale("pt", "br"))
-            val priceToReal: String = currencyFormatter.format(product.price)
-            productPrice.text = priceToReal
+            val productPriceOnRealCurrency : String = product.price.formatToRealCurrency()
+            productPrice.text = productPriceOnRealCurrency
 
             if (product.url.isNullOrBlank()) {
                 binding.ivProductImage.visibility = View.GONE
