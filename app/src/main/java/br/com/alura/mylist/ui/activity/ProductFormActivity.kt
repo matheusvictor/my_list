@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.mylist.R
-import br.com.alura.mylist.dao.ProductsDAO
 import br.com.alura.mylist.databinding.ActivityProductFormBinding
 import br.com.alura.mylist.extension.tryLoadImage
 import br.com.alura.mylist.model.Product
+import br.com.alura.mylist.repository.AppDatabase
 import br.com.alura.mylist.ui.dialog.FormImageDialog
 import java.math.BigDecimal
 
@@ -16,7 +16,12 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
     private val binding by lazy {
         ActivityProductFormBinding.inflate(layoutInflater)
     }
+    private val productsDAO by lazy {
+        AppDatabase.getInstance(this).productDao()
+    }
+
     private var urlImage: String? = null
+    private var productId: Long = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,20 +38,35 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
                     binding.formImageProduct.tryLoadImage(urlImage)
                 }
         }
+        productId = intent.getLongExtra(CHAVE_PRODUTO_ID, 0L)
+    }
 
+    override fun onResume() {
+        super.onResume()
+        title =
+            "Edit Produtc" // altera o título da activity se for aberta a partir do menu de edição
+        productsDAO.findById(productId)?.let {
+            fillFormFields(product = it)
+        }
+    }
+
+    private fun fillFormFields(product: Product) {
+        urlImage = product.url
+        binding.formImageProduct.tryLoadImage(product.url)
+        binding.formProductName.setText(product.productName)
+        binding.formProductDescription.setText(product.description)
+        binding.formProductPrice.setText(product.price.toPlainString())
     }
 
     private fun setConfirmButton() {
 
         val confirmButton = binding.btFormConfirm
-        val productsDAO = ProductsDAO()
+
 
         confirmButton.setOnClickListener {
             val newProduct = createNewProduct()
-
-            productsDAO.add(newProduct)
-            Log.i("ProductFormActivity", "onCreate: ${productsDAO.findAll()}")
-            finish() // finaliza activity e remove da pilha
+            productsDAO.save(newProduct)
+            finish()
         }
     }
 
@@ -69,11 +89,11 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
         }
 
         return Product(
+            id = productId,
             productName = productName,
             description = productDescription,
             price = productPrice,
             url = urlImage
         )
     }
-
 }

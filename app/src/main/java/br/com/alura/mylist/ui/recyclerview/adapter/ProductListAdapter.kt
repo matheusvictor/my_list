@@ -9,12 +9,10 @@ import br.com.alura.mylist.databinding.ProductItemBinding
 import br.com.alura.mylist.extension.formatToRealCurrency
 import br.com.alura.mylist.extension.tryLoadImage
 import br.com.alura.mylist.model.Product
-import java.text.NumberFormat
-import java.util.*
 
 class ProductListAdapter(
     private val context: Context,
-    products: List<Product>,
+    products: List<Product> = emptyList(),
     var whenClickOnItem: (product: Product) -> Unit = {}
 ) : RecyclerView.Adapter<ProductListAdapter.ProductListViewHolder>() {
 

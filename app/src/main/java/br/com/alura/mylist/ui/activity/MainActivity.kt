@@ -3,20 +3,14 @@ package br.com.alura.mylist.ui.activity
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import br.com.alura.mylist.dao.ProductsDAO
 import br.com.alura.mylist.databinding.ActivityMainBinding
+import br.com.alura.mylist.repository.AppDatabase
 import br.com.alura.mylist.ui.recyclerview.adapter.ProductListAdapter
 
 class MainActivity : Activity() {
 
-    private val productsDAO = ProductsDAO()
     private val bindingActivityMain by lazy { ActivityMainBinding.inflate(layoutInflater) }
-    private val adapter by lazy {
-        ProductListAdapter(
-            context = this,
-            products = productsDAO.findAll()
-        )
-    }
+    private val adapter = ProductListAdapter(context = this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +21,11 @@ class MainActivity : Activity() {
 
     override fun onResume() {
         super.onResume()
+
+        // AppDatabase Instance
+        val db = AppDatabase.getInstance(this)
+
+        val productsDAO = db.productDao()
         adapter.update(productsDAO.findAll())
     }
 
@@ -38,7 +37,7 @@ class MainActivity : Activity() {
                 this,
                 ProductDetailsActivity::class.java
             ).apply {
-                putExtra(CHAVE_PRODUTO, it)
+                putExtra(CHAVE_PRODUTO_ID, it.id)
             }
             startActivity(intent)
         }
