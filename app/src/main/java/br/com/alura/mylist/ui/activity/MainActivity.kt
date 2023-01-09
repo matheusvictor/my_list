@@ -33,6 +33,15 @@ class MainActivity : Activity() {
     private fun setRecyclerView() {
         val recyclerView = bindingActivityMain.rvProductList
         recyclerView.adapter = adapter
+        adapter.whenClickOnItem = {
+            val intent = Intent(
+                this,
+                ProductDetailsActivity::class.java
+            ).apply {
+                putExtra(CHAVE_PRODUTO, it)
+            }
+            startActivity(intent)
+        }
     }
 
     private fun setFab() {
