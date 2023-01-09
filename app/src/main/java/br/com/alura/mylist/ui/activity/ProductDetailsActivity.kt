@@ -1,7 +1,9 @@
 package br.com.alura.mylist.ui.activity
 
 import android.os.Bundle
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
+import br.com.alura.mylist.R
 import br.com.alura.mylist.databinding.ActivityProductDetailsBinding
 import br.com.alura.mylist.extension.formatToRealCurrency
 import br.com.alura.mylist.extension.tryLoadImage
@@ -17,6 +19,11 @@ class ProductDetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         tryLoadProduct()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_details_product, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
     private fun tryLoadProduct() {
