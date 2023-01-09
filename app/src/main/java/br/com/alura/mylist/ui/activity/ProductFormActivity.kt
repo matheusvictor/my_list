@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import br.com.alura.mylist.R
 import br.com.alura.mylist.databinding.ActivityProductFormBinding
-import br.com.alura.mylist.extension.formatToRealCurrency
 import br.com.alura.mylist.extension.tryLoadImage
 import br.com.alura.mylist.model.Product
 import br.com.alura.mylist.repository.AppDatabase
@@ -40,6 +39,7 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
             title =
                 "Edit Produtc" // altera o título da activity se for aberta a partir do menu de edição
             productId = product.id
+            urlImage = product.url
             binding.formImageProduct.tryLoadImage(product.url)
             binding.formProductName.setText(product.productName)
             binding.formProductDescription.setText(product.description)
@@ -59,6 +59,13 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
 
         confirmButton.setOnClickListener {
             val newProduct = createNewProduct()
+
+            if (productId > 0L) {
+                productsDAO.update(newProduct)
+            } else {
+                productsDAO.save(newProduct)
+            }
+
             productsDAO.save(newProduct)
             finish()
         }
@@ -83,6 +90,7 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
         }
 
         return Product(
+            id = productId,
             productName = productName,
             description = productDescription,
             price = productPrice,
