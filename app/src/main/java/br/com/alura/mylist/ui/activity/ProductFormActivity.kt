@@ -60,13 +60,11 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
         confirmButton.setOnClickListener {
             val newProduct = createNewProduct()
 
-            if (productId > 0L) {
+            if (productId > 0) {
                 productsDAO.update(newProduct)
             } else {
                 productsDAO.save(newProduct)
             }
-
-            productsDAO.save(newProduct)
             finish()
         }
     }
