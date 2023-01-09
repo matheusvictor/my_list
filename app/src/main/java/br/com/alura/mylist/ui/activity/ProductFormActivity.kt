@@ -16,6 +16,10 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
     private val binding by lazy {
         ActivityProductFormBinding.inflate(layoutInflater)
     }
+    private val productsDAO by lazy {
+        AppDatabase.getInstance(this).productDao()
+    }
+
     private var urlImage: String? = null
     private var productId: Long = 0L
 
@@ -34,37 +38,34 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
                     binding.formImageProduct.tryLoadImage(urlImage)
                 }
         }
+        productId = intent.getLongExtra(CHAVE_PRODUTO_ID, 0L)
+    }
 
-        intent.getParcelableExtra<Product>(CHAVE_PRODUTO)?.let { product ->
-            title =
-                "Edit Produtc" // altera o título da activity se for aberta a partir do menu de edição
-            productId = product.id
-            urlImage = product.url
-            binding.formImageProduct.tryLoadImage(product.url)
-            binding.formProductName.setText(product.productName)
-            binding.formProductDescription.setText(product.description)
-            binding.formProductPrice.setText(product.price.toPlainString())
+    override fun onResume() {
+        super.onResume()
+        title =
+            "Edit Produtc" // altera o título da activity se for aberta a partir do menu de edição
+        productsDAO.findById(productId)?.let {
+            fillFormFields(product = it)
         }
+    }
 
+    private fun fillFormFields(product: Product) {
+        urlImage = product.url
+        binding.formImageProduct.tryLoadImage(product.url)
+        binding.formProductName.setText(product.productName)
+        binding.formProductDescription.setText(product.description)
+        binding.formProductPrice.setText(product.price.toPlainString())
     }
 
     private fun setConfirmButton() {
 
         val confirmButton = binding.btFormConfirm
 
-        // AppDatabase Instance
-        val db = AppDatabase.getInstance(this)
-
-        val productsDAO = db.productDao()
 
         confirmButton.setOnClickListener {
             val newProduct = createNewProduct()
-
-            if (productId > 0) {
-                productsDAO.update(newProduct)
-            } else {
-                productsDAO.save(newProduct)
-            }
+            productsDAO.save(newProduct)
             finish()
         }
     }
@@ -95,5 +96,4 @@ class ProductFormActivity : AppCompatActivity(R.layout.activity_product_form) {
             url = urlImage
         )
     }
-
 }
