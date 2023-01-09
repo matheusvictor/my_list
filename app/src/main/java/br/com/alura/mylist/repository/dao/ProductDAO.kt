@@ -22,4 +22,7 @@ interface ProductDAO {
     @Update
     fun update(vararg product: Product)
 
+    @Query("SELECT * FROM Product WHERE id = :id")
+    fun findById(id: Long): Product?
+
 }

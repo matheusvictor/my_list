@@ -18,12 +18,27 @@ class ProductDetailsActivity : AppCompatActivity() {
         ActivityProductDetailsBinding.inflate(layoutInflater)
     }
 
-    private lateinit var product: Product
+    private var productId: Long? = null
+    private var product: Product? = null
+
+    private val productDao by lazy {
+        AppDatabase.getInstance(this).productDao()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         tryLoadProduct()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        productId?.let { id ->
+            product = productDao.findById(id)
+        }
+        product?.let {
+            fillFields(it)
+        } ?: finish() // fecha a tela se o produto procurado no BD for nulo
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -33,31 +48,26 @@ class ProductDetailsActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        if (::product.isInitialized) {
-            val db = AppDatabase.getInstance(this)
-            val productDao = db.productDao()
-
-            when (item.itemId) {
-                R.id.menu_details_edit_product -> {
-                    Intent(this, ProductFormActivity::class.java).apply {
-                        putExtra(CHAVE_PRODUTO, product)
-                        startActivity(this)
-                    }
-                }
-                R.id.menu_details_delete_product -> {
-                    productDao.delete(product)
-                    finish()
+        when (item.itemId) {
+            R.id.menu_details_edit_product -> {
+                Intent(this, ProductFormActivity::class.java).apply {
+                    putExtra(CHAVE_PRODUTO, product)
+                    startActivity(this)
                 }
             }
+            R.id.menu_details_delete_product -> {
+                product?.let {
+                    productDao.delete(it)
+                }
+                finish()
+            }
         }
-
         return super.onOptionsItemSelected(item)
     }
 
     private fun tryLoadProduct() {
         intent.getParcelableExtra<Product>(CHAVE_PRODUTO)?.let {
-            this.product = it
-            fillFields(it)
+            productId = it.id
         } ?: finish()
     }
 
